@@ -331,5 +331,182 @@ public class EmployeeServices {
 	}
 	
 	
+	public static void comparePerformance() {
+
+	    String query = "SELECT * FROM EMPLOYEEEEE WHERE DEPARTMENT='IT'";
+
+	    int iterations = 10;
+
+	    // Using Statement
+	    long startStatement = System.nanoTime();
+
+	    try (
+	            Connection connection = DriverManager.getConnection(url);
+	            Statement statement = connection.createStatement();
+	    ) {
+
+	        for(int i = 0;i < iterations;i++) {
+	            ResultSet result = statement.executeQuery(query);
+
+	            while(result.next()) {
+	                result.getString("EmpName");
+	            }
+	        }
+
+	    } catch(SQLException e) {
+	        e.printStackTrace();
+	    }
+
+	    long endStatement = System.nanoTime();
+
+	    long statementTime = endStatement - startStatement;
+
+
+
+	    // Using PreparedStatement
+	    long startPrepared = System.nanoTime();
+
+	    String preparedQuery = "SELECT * FROM EMPLOYEEEEE WHERE DEPARTMENT=?";
+
+
+	    try (
+	            Connection connection = DriverManager.getConnection(url);
+	            PreparedStatement preparedStatement = connection.prepareStatement(preparedQuery);
+	    ) {
+
+	        for(int i = 0;i < iterations;i++) {
+
+	            preparedStatement.setString(1,"IT");
+
+	            ResultSet result = preparedStatement.executeQuery();
+
+	            while(result.next()) {
+	                result.getString("EmpName");
+	            }
+	        }
+
+	    } catch(SQLException e) {
+	        e.printStackTrace();
+	    }
+
+
+	    long endPrepared = System.nanoTime();
+
+
+	    long preparedTime = endPrepared - startPrepared;
+
+
+	    System.out.println("------------ Performance Comparison ------------");
+
+	    System.out.println("Statement Time : " + statementTime + " nanoseconds");
+
+	    System.out.println("PreparedStatement Time : " + preparedTime + " nanoseconds");
+
+
+	    if(preparedTime < statementTime) {
+	        System.out.println("PreparedStatement is faster");
+	    }
+	    else {
+	        System.out.println("Statement is faster");
+	    }
+
+	}
+	
+	
+	public static void unsafeLogin(String empName) {
+
+	    String query = 
+	    "SELECT * FROM EMPLOYEEEEE WHERE EMPNAME='" 
+	    + empName + "'";
+
+
+	    try(
+	        Connection connection = DriverManager.getConnection(url);
+	        Statement statement = connection.createStatement();
+	    ){
+
+	        ResultSet result = statement.executeQuery(query);
+
+
+	        if(result.next()) {
+	            System.out.println("Employee Found");
+	        }
+	        else {
+	            System.out.println("Employee Not Found");
+	        }
+
+
+	    }
+	    catch(SQLException e){
+	        e.printStackTrace();
+	    }
+
+	}
+	
+	
+	public static void safeLogin(String empName) {
+
+
+	    String query =
+	    "SELECT * FROM EMPLOYEEEEE WHERE EMPNAME=?";
+
+
+	    try(
+	        Connection connection = DriverManager.getConnection(url);
+	        PreparedStatement statement = connection.prepareStatement(query);
+	    ){
+
+	        statement.setString(1, empName);
+
+
+	        ResultSet result = statement.executeQuery();
+
+
+	        if(result.next()) {
+	            System.out.println("Employee Found");
+	        }
+	        else {
+	            System.out.println("Employee Not Found");
+	        }
+
+
+	    }
+	    catch(SQLException e){
+	        e.printStackTrace();
+	    }
+
+	}
+	
+	/*
+	 * Statement concatenates user input directly into the SQL query, making it
+	 * vulnerable to SQL injection attacks.
+	 * 
+	 * PreparedStatement uses parameterized queries (?) and sends user input
+	 * separately from the SQL statement. The database treats the input as data
+	 * instead of executable SQL, preventing SQL injection.
+	 */
+	public static void sqlInjectionDemo(Scanner sc) {
+
+		//INPUT = ' OR '1'='1
+
+	    System.out.println("Enter Employee Name:");
+
+	    sc.nextLine();          
+	    String name = sc.nextLine();
+
+	    System.out.println("\n--- Using Statement ---");
+	    unsafeLogin(name);
+
+
+
+	    System.out.println("\n--- Using PreparedStatement ---");
+	    safeLogin(name);
+
+	}
+
+
+
+	
+	
 
 }

@@ -16,7 +16,9 @@ public class Main {
 		        3. Update Employee Details
 		        4. Delete Employee By ID
 		        5. Batch Insert
-		        6. Exit
+		        6. Statement v/s PreparedStatement Performance 
+		        7. SQL Injection Demo
+		        8. Exit
 		           Enter Your Choice
 		        """;
 		
@@ -51,6 +53,14 @@ public class Main {
 				break;
 			}
 			case 6: {
+				EmployeeServices.comparePerformance();
+				break;
+			}
+			case 7: {
+				EmployeeServices.sqlInjectionDemo(sc);
+				break;
+			}
+			case 8: {
 				sc.close();
 				System.exit(0);
 			}
