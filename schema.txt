@@ -1,0 +1,25 @@
+CREATE TABLE Employeeeee (
+    EmpId INT IDENTITY(101,1) PRIMARY KEY,
+    EmpName VARCHAR(50) NOT NULL,
+    Department VARCHAR(50),
+    Salary DECIMAL(10,2),
+    City VARCHAR(50)
+);
+GO
+
+INSERT INTO Employeeeee (EmpName, Department, Salary, City) VALUES
+('Amit Sharma', 'HR', 35000, 'Bangalore'),
+('Priya Singh', 'Finance', 42000, 'Mysore'),
+('Rahul Verma', 'IT', 55000, 'Hyderabad'),
+('Sneha Patel', 'Marketing', 40000, 'Mumbai'),
+('Arjun Reddy', 'IT', 60000, 'Chennai'),
+('Neha Gupta', 'HR', 37000, 'Pune'),
+('Karan Mehta', 'Finance', 48000, 'Delhi'),
+('Pooja Nair', 'Sales', 39000, 'Kochi'),
+('Vikram Rao', 'IT', 65000, 'Bangalore'),
+('Anjali Das', 'Sales', 41000, 'Kolkata'),
+('Rohit Kumar', 'IT', 70000, 'Noida'),
+('Meera Joshi', 'Marketing', 43000, 'Ahmedabad');
+GO
+
+SELECT * FROM EMPLOYEEEEE;
